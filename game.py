@@ -136,13 +136,26 @@ def add_random_element():
 def check_win():
     for i in range(4):
         for j in range(4):
-            if board[i][j] == 2048:
+            if board[i][j] == 16:
                 return True
     return False
 
 
 def check_free_space(i, j):
     return board[i][j] == 0
+
+
+def check_high_score():
+    if not score in high_scores:
+        if score > high_scores[0]:
+            high_scores[2] = high_scores[1]
+            high_scores[1] = high_scores[0]
+            high_scores[0] = score
+        elif score > high_scores[1]:
+            high_scores[2] = high_scores[1]
+            high_scores[1] = score
+        elif score > high_scores[2]:
+            high_scores[2] = score
 
 
 def initialize_game():
@@ -158,9 +171,11 @@ def main():
     clear()
     add_random_element()
     while True:
+        print(f"\n\t\t\tHigh scores :   1. {high_scores[0]}\n\t\t\t\t\t" + \
+                f"2. {high_scores[1]}\n\t\t\t\t\t3. {high_scores[2]}\n")
         show_board()
         print(f"\n\t\t\tScore : {score}")
-        print("\n\t\t\tDown : s , Up : w , right : d , left : a")
+        print("\n\t\t\tDown : s , Up : w , right : d , left : a , Quit : q")
         choice = input("\n\t\t\tEnter your choice : ").lower()
         clear()
         
@@ -172,6 +187,8 @@ def main():
             move_down_and_right("right")
         elif choice == "a":
             move_up_and_left("left")
+        elif choice == "q":
+            exit()
         else:
             print("\n\t\t\tWrong input! Try again!\n")
 
@@ -179,6 +196,7 @@ def main():
             show_board()
             print("\n\t\t\tYou won!")
             print(f"\n\t\t\tScore : {score}")
+            check_high_score()
             while True:
                 choice = input("\n\t\t\tDo you want to continue? (y/n) ").lower()
                 if choice == 'y':
