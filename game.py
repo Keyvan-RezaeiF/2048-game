@@ -145,7 +145,16 @@ def check_free_space(i, j):
     return board[i][j] == 0
 
 
+def initialize_game():
+    global score
+    score = 0
+    for i in range(4):
+        for j in range(4):
+            board[i][j] = 0
+
+
 def main():
+    initialize_game()
     clear()
     add_random_element()
     while True:
@@ -166,12 +175,24 @@ def main():
         else:
             print("\n\t\t\tWrong input! Try again!\n")
 
-        add_random_element()
         if check_win():
+            show_board()
             print("\n\t\t\tYou won!")
+            print(f"\n\t\t\tScore : {score}")
+            while True:
+                choice = input("\n\t\t\tDo you want to continue? (y/n) ").lower()
+                if choice == 'y':
+                    main()
+                elif choice == 'n':
+                    exit()
+                else:
+                    print("\n\t\t\tWrong input! Try again!\n")
+        
         if check_game_over():
             print("\n\t\t\tYou lost!")
             exit()
+        else:
+            add_random_element()
 
 
 if __name__ == "__main__":
