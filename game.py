@@ -24,42 +24,48 @@ def show_board():
     print()
 
 
-def move_down():
+def move_down_and_right(direction):
+    move_down_or_right(direction)
+    add_elements_down_or_right(direction)
+    move_down_or_right(direction)
+
+
+def move_down_or_right(direction):
     i = 2
     while i >= 0:
         j = 0
         while j < 4:
             temp_i = i
-            while temp_i < 3 and check_free_space(temp_i+1, j):
-                board[temp_i + 1][j] = board[temp_i][j]
-                board[temp_i][j] = 0
-                temp_i += 1
-            j += 1
-        i -= 1
-    add_elements_down()
-    i = 2
-    while i >= 0:
-        j = 0
-        while j < 4:
-            temp_i = i
-            while temp_i < 3 and check_free_space(temp_i+1, j):
-                board[temp_i + 1][j] = board[temp_i][j]
-                board[temp_i][j] = 0
-                temp_i += 1
+            if direction == "down":
+                while temp_i < 3 and check_free_space(temp_i+1, j):
+                    board[temp_i + 1][j] = board[temp_i][j]
+                    board[temp_i][j] = 0
+                    temp_i += 1
+            elif direction == "right":
+                while temp_i < 3 and check_free_space(j, temp_i+1):
+                    board[j][temp_i+1] = board[j][temp_i]
+                    board[j][temp_i] = 0
+                    temp_i += 1
             j += 1
         i -= 1
 
 
-def add_elements_down():
+def add_elements_down_or_right(direction):
     global score
     i = 2
     while i >= 0:
         j = 0
         while j < 4:
-            if board[i][j] == board[i+1][j]:
-                board[i+1][j] += board[i][j]
-                board[i][j] = 0
-                score += board[i+1][j]
+            if direction == "down":
+                if board[i][j] == board[i+1][j]:
+                    board[i+1][j] += board[i][j]
+                    board[i][j] = 0
+                    score += board[i+1][j]
+            elif direction == "right":
+                if board[j][i] == board[j][i+1]:
+                    board[j][i+1] += board[j][i]
+                    board[j][i] = 0
+                    score += board[j][i+1]
             j += 1
         i -= 1
 
@@ -102,46 +108,6 @@ def add_elements_up():
                 score += board[i-1][j]
             j += 1
         i += 1
-
-
-def move_right():
-    i = 2
-    while i >= 0:
-        j = 0
-        while j < 4:
-            temp_i = i
-            while temp_i < 3 and check_free_space(j, temp_i+1):
-                board[j][temp_i+1] = board[j][temp_i]
-                board[j][temp_i] = 0
-                temp_i += 1
-            j += 1
-        i -= 1
-    add_elements_right()
-    i = 2
-    while i >= 0:
-        j = 0
-        while j < 4:
-            temp_i = i
-            while temp_i < 3 and check_free_space(j, temp_i+1):
-                board[j][temp_i+1] = board[j][temp_i]
-                board[j][temp_i] = 0
-                temp_i += 1
-            j += 1
-        i -= 1
-
-
-def add_elements_right():
-    global score
-    i = 2
-    while i >= 0:
-        j = 0
-        while j < 4:
-            if board[j][i] == board[j][i+1]:
-                board[j][i+1] += board[j][i]
-                board[j][i] = 0
-                score += board[j][i+1]
-            j += 1
-        i -= 1
 
 
 def move_left():
@@ -226,11 +192,11 @@ def main():
         clear()
 
         if choice == "s":
-            move_down()
+            move_down_and_right("down")
         elif choice == "w":
             move_up()
         elif choice == "d":
-            move_right()
+            move_down_and_right("right")
         elif choice == "a":
             move_left()
         else:
