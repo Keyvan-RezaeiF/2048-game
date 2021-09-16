@@ -136,7 +136,7 @@ def add_random_element():
 def check_win():
     for i in range(4):
         for j in range(4):
-            if board[i][j] == 16:
+            if board[i][j] == 2048:
                 return True
     return False
 
@@ -145,20 +145,41 @@ def check_free_space(i, j):
     return board[i][j] == 0
 
 
+def save_high_scores():
+    with open("highScores.txt", 'w') as file:
+        for score in high_scores:
+            file.write(str(score) + "\n")
+
+
+def read_high_scores():
+    with open("highScores.txt", 'r') as file:
+        for i in range(3):
+            high_scores[i] = file.readline()
+
+
 def check_high_score():
+    global high_scores
+    high_scores = list(map(int, high_scores))
     if not score in high_scores:
-        if score > high_scores[0]:
+        if int(score) > int(high_scores[0]):
+            print("\n\t\t\tNew 1st record!")
             high_scores[2] = high_scores[1]
             high_scores[1] = high_scores[0]
             high_scores[0] = score
-        elif score > high_scores[1]:
+        elif int(score) > int(high_scores[1]):
+            print("\n\t\t\tNew 2nd record!")
             high_scores[2] = high_scores[1]
             high_scores[1] = score
-        elif score > high_scores[2]:
+        elif int(score) > int(high_scores[2]):
+            print("\n\t\t\tNew 3rd record!")
             high_scores[2] = score
+
+    save_high_scores()
 
 
 def initialize_game():
+    read_high_scores()
+    print(high_scores)
     global score
     score = 0
     for i in range(4):
